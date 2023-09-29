@@ -1,4 +1,4 @@
 # free-tools.github.io
 Free tools for use.
 
-<a href="./webcam-photo.html">webcam photo</a>
+<a href="https://lladruc.github.io/free-tools.github.io/webcam-photo.html">webcam photo</a>
