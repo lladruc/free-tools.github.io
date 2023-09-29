@@ -5,6 +5,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>
 	</title>
+	<style>
+		.video-wrap{
+			text-align:center;
+		}
+		.controller{
+			text-align:center;
+		}
+		#canvas{
+			visibility:hidden;
+		}
+	</style>
 </head>
 <body>
 	<!—Aquí el video embebido de la webcam -->
@@ -14,6 +25,8 @@
 	<!—El elemento canvas -->
 	<div class="controller">
 	<button id="snap">Capture</button>
+	<a id="download" download="Canvas.png">Download Canvas</a>
+
 	</div>
 	<!—Botón de captura -->
 	<canvas id="canvas" width="640" height="480"></canvas> 
@@ -52,6 +65,19 @@
 	snap.addEventListener("click", function() {
 	context.drawImage(video, 0, 0, 640, 480);
 	});
+
+	var canvas = document.getElementById("canvasSimpleOutline");
+	function downloadCanvas() {
+	var data = canvas.toDataURL('image/png');
+	/* Change MIME type to trick the browser to downlaod the file instead of displaying it */
+	data = data.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
+	 
+	/* In addition to <a>'s "download" attribute, you can define HTTP-style headers */
+	data = data.replace(/^data:application\/octet-stream/, 'data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=Canvas.png');
+	 
+	this.href = data;
+	};
+	document.getElementById("download").addEventListener('click', downloadCanvas, false);
 
 </script>
 </body>
