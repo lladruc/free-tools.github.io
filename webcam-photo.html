@@ -91,73 +91,44 @@
 		    border-color: #adadad;
 		}
 	</style>
-</head>
-<body>
-	<!—Aquí el video embebido de la webcam -->
-	<div class="video-wrap">
-	<video id="video" playsinline autoplay></video>
-	</div>
-	<!—El elemento canvas -->
-	<div class="controller">
-	<button id="snap" class="btn btn-blue">Capture</button>
-	<button id="download" class="btn btn-default" download="Canvas.png">Download Canvas</button>
+	<script type="text/javascript" src="https://github.com/addyosmani/getUserMedia.js/blob/gh-pages/lib/getUserMedia.js"></script>
+</head><body>
+  <!-- Tu contenido HTML existente -->
+  <div class="video-wrap">
+    <video id="video" playsinline autoplay></video>
+  </div>
+  <div class="controller">
+    <button id="snap" class="btn btn-blue">Capture</button>
+    <button id="download" class="btn btn-default" download="Canvas.png">Download Canvas</button>
+  </div>
+  <br />
+  <br />
+  <div class="video-wrap">
+    <canvas id="canvas" width="800" height="600"></canvas>
+  </div>
 
-	</div>
-	<!—Botón de captura -->
-	<br />
-	<br/ >
-	<div class="video-wrap">
-		<canvas id="canvas" width="800" height="600"></canvas> 
-	</div>
+  <!-- Incluye la librería getUserMedia.js -->
+  <script src="ruta-a-getUserMedia.js"></script>
 
+  <script type="text/javascript">
+    'use strict';
+    const video = document.getElementById('video');
+    const snap = document.getElementById("snap");
+    const canvas = document.getElementById('canvas');
+    const errorMsgElement = document.querySelector('span#errorMsg');
 
-<script type="text/javascript">
-	'use strict';
-	const video = document.getElementById('video');
-	const snap = document.getElementById("snap");
-	const canvas = document.getElementById('canvas');
-	const errorMsgElement = document.querySelector('span#errorMsg');
-	const constraints = {
-	audio: true,
-	video: {
-	width: 800, height: 600
-	}
-	};
-	// Acceso a la webcam
-	async function init() {
-	try {
-	const stream = await navigator.mediaDevices.getUserMedia(constraints);
-	handleSuccess(stream);
-	} catch (e) {
-	errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
-	}
-	}
-	// Correcto!
-	function handleSuccess(stream) {
-	window.stream = stream;
-	video.srcObject = stream;
-	}
-	// Load init
-	init();
-	// Dibuja la imagen
-	var context = canvas.getContext('2d');
-	snap.addEventListener("click", function() {
-	context.drawImage(video, 0, 0, 800, 600);
-	});
+    if (navigator.getUserMedia) {
+      navigator.getUserMedia({ video: true }, function (stream) {
+        video.srcObject = stream;
+      }, function (error) {
+        errorMsgElement.innerHTML = `Error al acceder a la cámara: ${error.name} - ${error.message}`;
+      });
+    } else {
+      errorMsgElement.innerHTML = 'getUserMedia no es compatible con este navegador.';
+    }
 
-	//var canvas = document.getElementById("canvas");
-	function downloadCanvas() {
-	var data = canvas.toDataURL('image/png');
-	/* Change MIME type to trick the browser to downlaod the file instead of displaying it */
-	data = data.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
-	 
-	/* In addition to <a>'s "download" attribute, you can define HTTP-style headers */
-	data = data.replace(/^data:application\/octet-stream/, 'data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=Canvas.png');
-	 
-	this.href = data;
-	};
-	document.getElementById("download").addEventListener('click', downloadCanvas, false);
+    // Resto de tu código para capturar y descargar la imagen
 
-</script>
+  </script>
 </body>
 </html>
