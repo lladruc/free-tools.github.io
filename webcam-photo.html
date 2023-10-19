@@ -95,7 +95,7 @@
 </head><body>
   <!-- Tu contenido HTML existente -->
   <div class="video-wrap">
-    <video id="video" playsinline autoplay></video>
+    <video id="video" playsinline autoplay width="800" height="600"></video>
   </div>
   <div class="controller">
     <button id="snap" class="btn btn-blue">Capture</button>
@@ -127,7 +127,24 @@
       errorMsgElement.innerHTML = 'getUserMedia no es compatible con este navegador.';
     }
 
-    // Resto de tu código para capturar y descargar la imagen
+  // Dibuja la imagen
+var context = canvas.getContext('2d');
+snap.addEventListener("click", function() {
+context.drawImage(video, 0, 0, 800, 600);
+});
+
+//var canvas = document.getElementById("canvas");
+function downloadCanvas() {
+var data = canvas.toDataURL('image/png');
+/* Change MIME type to trick the browser to downlaod the file instead of displaying it */
+data = data.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
+ 
+/* In addition to <a>'s "download" attribute, you can define HTTP-style headers */
+data = data.replace(/^data:application\/octet-stream/, 'data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=Canvas.png');
+ 
+this.href = data;
+};
+document.getElementById("download").addEventListener('click', downloadCanvas, false);
 
   </script>
 </body>
